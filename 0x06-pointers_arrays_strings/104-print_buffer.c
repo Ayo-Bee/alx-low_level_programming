@@ -1,31 +1,45 @@
-#include "main.h"
 #include <stdio.h>
+#include <ctype.h>
 
+void print_buffer(char *b, int size) {
+    if (size <= 0) {
+        printf("\n");
+        return;
+    }
 
-/**
- * print_buffer - prints a buffer
- * @b: buffer to print
- * @size: size of buffer
- *
- * Return: void
- */
-void print_buffer(char *b, int size)
-{
-	int i;
+    int i, j;
+    for (i = 0; i < size; i += 10) {
+        printf("%08x ", i);
 
-	for (i = 0; i <= (size - 1) / 10 && size; i++)
-	{
-		printf("%08x: ", i * 10);
-		if (i < size / 10)
-		{
-			print_line(b, 9, i);
-		}
-		else
-		{
-			print_line(b, size % 10 - 1, i);
-		}
-		putchar('\n');
-	}
-	if (size == 0)
-		putchar('\n');
+        // Print the hexadecimal content
+        for (j = i; j < i + 10; j += 2) {
+            if (j < size) {
+                printf("%02x", b[j] & 0xff);
+                if (j + 1 < size) {
+                    printf("%02x ", b[j+1] & 0xff);
+                } else {
+                    printf("   ");
+                }
+            } else {
+                printf("     ");
+            }
+        }
+
+        // Print the ASCII content
+        printf(" ");
+        for (j = i; j < i + 10; j++) {
+            if (j < size) {
+                if (isprint(b[j])) {
+                    printf("%c", b[j]);
+                } else {
+                    printf(".");
+                }
+            } else {
+                printf(" ");
+            }
+        }
+
+        printf("\n");
+    }
 }
+
